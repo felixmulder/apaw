@@ -11,7 +11,6 @@
 -- but WITHOUT ANY WARRANTY; without even the implied warranty of
 -- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 -- GNU General Public License for more details.
--- 
 -- You should have received a copy of the GNU General Public License
 -- along with APWT. If not, see <http://www.gnu.org/licenses/>.
 
@@ -30,6 +29,7 @@ local p = pulseaudio:Create()
 
 local pulseWidget = wibox.widget.textbox()
 pulseWidget:set_align("right")
+pulseWidget:set_font("Montecarlo 18")
 
 local function _update()
   local vol = math.floor(p.Volume * 100 + 0.5)
