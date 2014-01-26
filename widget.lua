@@ -1,4 +1,5 @@
--- Copyright 2013 mokasin
+-- Copyright 2014 Felix Mulder
+-- Based off of mokasin's Awesome Pulseaudio Widget
 -- This file is part of the Awesome Pulseaudio Widget Text (APWT).
 -- 
 -- APWT is free software: you can redistribute it and/or modify
