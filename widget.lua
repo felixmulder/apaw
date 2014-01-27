@@ -17,70 +17,75 @@
 -- Configuration variables
 local step  = 0.02          -- stepsize for volume change (from 0 to 1)
 local mixer = 'pavucontrol' -- mixer command
-
 -- End of configuration
 
-local awful = require("awful")
-local wibox = require("wibox")
-local pulseaudio = require("apwt.pulseaudio")
+local awful       = require("awful")
+local wibox       = require("wibox")
+local pulseaudio  = require("apwt.pulseaudio")
+local beautiful   = require("beautiful")
 
 local p = pulseaudio:Create()
 
 
-local pulseWidget = wibox.widget.textbox()
-pulseWidget:set_align("right")
-pulseWidget:set_font("Montecarlo 18")
+local widget = wibox.widget.imagebox()
 
 local function _update()
   local vol = math.floor(p.Volume * 100 + 0.5)
 	if p.Mute then
-    pulseWidget:set_markup(vol .. "M")
+    widget:set_image(beautiful.vol_muted)
 	else
-    pulseWidget:set_markup(vol .. "%")
+    if vol > 70 then
+      widget:set_image(beautiful.vol_high)
+    elseif vol > 40 then
+      widget:set_image(beautiful.vol_med)
+    elseif vol > 0 then
+      widget:set_image(beautiful.vol_low)
+    else
+      widget:set_image(beautiful.vol_none)
+    end
 	end
 end
 
-function pulseWidget.SetMixer(command)
+function widget.SetMixer(command)
 	mixer = command
 end
 
-function pulseWidget.Up()
+function widget.Up()
 	p:SetVolume(p.Volume + step)
 	_update()
 end	
 
-function pulseWidget.Down()
+function widget.Down()
 	p:SetVolume(p.Volume - step)
 	_update()
 end	
 
 
-function pulseWidget.ToggleMute()
+function widget.ToggleMute()
 	p:ToggleMute()
 	_update()
 end
 
-function pulseWidget.Update()
+function widget.Update()
 	p:UpdateState()
 	 _update()
 end
 
-function pulseWidget.LaunchMixer()
+function widget.LaunchMixer()
 	awful.util.spawn_with_shell( mixer )
 end
 
 
 -- register mouse button actions
-pulseWidget:buttons(awful.util.table.join(
-		awful.button({ }, 1, pulseWidget.ToggleMute),
-		awful.button({ }, 3, pulseWidget.LaunchMixer),
-		awful.button({ }, 4, pulseWidget.Up),
-		awful.button({ }, 5, pulseWidget.Down)
+widget:buttons(awful.util.table.join(
+		awful.button({ }, 1, widget.ToggleMute),
+		awful.button({ }, 3, widget.LaunchMixer),
+		awful.button({ }, 4, widget.Up),
+		awful.button({ }, 5, widget.Down)
 	)
 )
-
 
 -- initialize
 _update()
 
-return pulseWidget
+return widget
