@@ -21,7 +21,7 @@ local mixer = 'pavucontrol' -- mixer command
 
 local awful       = require("awful")
 local wibox       = require("wibox")
-local pulseaudio  = require("apwt.pulseaudio")
+local pulseaudio  = require("apaw.pulseaudio")
 local beautiful   = require("beautiful")
 
 local p = pulseaudio:Create()
